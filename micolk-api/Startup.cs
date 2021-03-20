@@ -30,7 +30,7 @@ namespace micolk_api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "micolk_api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MicoLK API", Version = "v1" });
             });
         }
 
@@ -41,7 +41,7 @@ namespace micolk_api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "micolk_api v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MicoLK API v1"));
             }
 
             app.UseHttpsRedirection();
