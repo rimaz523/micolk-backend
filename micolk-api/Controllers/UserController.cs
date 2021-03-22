@@ -1,8 +1,6 @@
-﻿using Application.Users.Queries.GetUserById;
+﻿using Application.Users.Commands.CreateUser;
+using Application.Users.Queries.GetUserById;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace micolk_api.Controllers
@@ -16,6 +14,12 @@ namespace micolk_api.Controllers
         public async Task<ActionResult<UserDto>> GetUserById([FromQuery] GetUserByIdQuery query)
         {
             return await Mediator.Send(query);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserDto>> Post(CreateUserCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }
