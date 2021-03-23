@@ -4,26 +4,58 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- develop
-
-pool:
-  vmImage: 'windows-latest'
+    branches:
+        include:
+            - master
+            - develop
+            - releases/*
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+- group: DevDeploymentVarGroup
 
-steps:
-- task: NuGetToolInstaller@1
+stages:
+    - stage: 'Build'
+      displayName: 'Build the backend REST api'
+      jobs:
+          - job: 'Build'
+            displayName: 'Build job'
+            pool:
+                vmImage: '$(buildVmImage)'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+            steps:
+                - task: UseDotNet@2
+                  inputs:
+                    version: '5.0.x'
+                    includePreviewVersions: true # Required for preview versions
+                
+                - task: DotNetCoreCLI@2
+                  displayName: Restore
+                  inputs:
+                    command: 'restore'
+                    projects: '**/*.csproj'
+                    includeNuGetOrg: true
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+                - task: DotNetCoreCLI@2
+                  displayName: Build
+                  inputs:
+                    command: build
+                    projects: '**/*.csproj'
+                    arguments: '--configuration $(buildConfiguration)'
+
+                - task: DotNetCoreCLI@2
+                  inputs:
+                    command: test
+                    projects: '**/*Tests/*.csproj'
+                    arguments: '--configuration $(buildConfiguration)'
+
+                - task: DotNetCoreCLI@2
+                  inputs:
+                    command: publish
+                    publishWebProjects: True
+                    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+                    zipAfterPublish: True
+
+                - task: PublishBuildArtifacts@1
+                  inputs:
+                    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+                    artifactName: 'micolk-backend-api'
