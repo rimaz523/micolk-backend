@@ -40,17 +40,39 @@ stages:
                   inputs:
                     command: build
                     projects: '**/*.csproj'
-                    arguments: '--configuration $(buildConfiguration)'
+                    arguments: '--no-restore --configuration $(buildConfiguration)'
 
                 - task: DotNetCoreCLI@2
                   displayName: Publish
                   inputs:
                     command: publish
-                    publishWebProjects: True
-                    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-                    zipAfterPublish: True
+                    publishWebProjects: false
+                    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+                    zipAfterPublish: true
 
                 - task: PublishBuildArtifacts@1
-                  inputs:
-                    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-                    artifactName: 'micolk-backend-api'
+                  displayName: 'Publish Artifact: drop'
+                  condition: succeeded()
+
+    - stage: 'Deploy'
+      displayName: 'Deploy the backend REST api'
+      dependsOn: Build
+      condition: and (succeeded(), eq(variables['Build.SourceBranchName'], 'develop'))
+      jobs:
+          - deployment: Deploy
+            pool: 'MyAgentPool'
+            environment: Development
+            strategy:
+                runOnce:
+                    deploy:
+                        steps:
+                            - download: current
+                              artifact: drop
+
+                            - task: AzureWebApp@1
+                              displayName: 'Azure App Service Deploy: .net core 5 api'
+                              inputs:
+                                  azureSubscription: '$(managedIdentityName)'
+                                  appName: '$(apiServiceName)'
+                                  appType: 'webApp'
+                                  package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
