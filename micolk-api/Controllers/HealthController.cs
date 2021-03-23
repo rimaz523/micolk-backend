@@ -3,7 +3,7 @@
 namespace micolk_api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class HealthController
     {
         [HttpGet]
