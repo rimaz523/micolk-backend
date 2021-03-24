@@ -54,6 +54,11 @@ stages:
                   displayName: 'Publish Artifact: drop'
                   condition: succeeded()
 
+                - task: PublishBuildArtifacts@1
+                  displayName: 'Publish Artifact: drop'
+                  inputs:
+                      pathtoPublish: 'ArmTemplates'
+
     - stage: 'Deploy'
       displayName: 'Deploy the backend REST api'
       dependsOn: Build
@@ -68,11 +73,26 @@ stages:
                         steps:
                             - download: current
                               artifact: drop
+                            
+                            - task: AzureResourceManagerTemplateDeployment@3
+                              inputs:
+                                deploymentScope: 'Resource Group'
+                                azureResourceManagerConnection: '$(managedIdentityName)'
+                                subscriptionId: '$(subscriptionId)'
+                                action: 'Create Or Update Resource Group'
+                                resourceGroupName: '$(resourceGroupName)'
+                                location: '$(resourceGroupLocation)'
+                                templateLocation: 'Linked artifact'
+                                csmFile: '$(Pipeline.Workspace)/drop/azuredeploy.json'
+                                csmParametersFile: '$(Pipeline.Workspace)/drop/azuredeploy.parameters.json'
+                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku)
+                                deploymentMode: 'Incremental'
+                                deploymentName: 'deploy2'
 
                             - task: AzureWebApp@1
                               displayName: 'Azure App Service Deploy: .net core 5 api'
                               inputs:
                                   azureSubscription: '$(managedIdentityName)'
-                                  appName: '$(apiServiceName)'
+                                  appName: '$(appName)-$(backendApiSuffix)-$(environment)'
                                   appType: 'webApp'
                                   package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
