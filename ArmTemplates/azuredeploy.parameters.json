@@ -13,6 +13,9 @@
     },
     "sku": {
       "value": "B1"
+    },
+    "dotnetVersion": {
+      "value": "v5.0"
     }
   }
 }

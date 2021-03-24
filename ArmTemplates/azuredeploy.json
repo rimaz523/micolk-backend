@@ -38,6 +38,13 @@
       "metadata": {
         "description": "The SKU of App Service Plan."
       }
+    },
+    "dotnetVersion": {
+      "type": "string",
+      "defaultValue": "v5.0",
+      "metadata": {
+        "description": "dotnet core version for sdk"
+      }
     }
   },
   "variables": {
@@ -71,7 +78,7 @@
                             "value": "dotnet"
                         }
                     ],
-                    "netFrameworkVersion": "v5.0"
+                    "netFrameworkVersion": "[parameters('dotnetVersion')]"
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
                 "clientAffinityEnabled": true
