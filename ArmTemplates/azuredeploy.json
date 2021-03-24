@@ -42,7 +42,7 @@
   },
   "variables": {
     "webAppName": "[concat(parameters('webAppDomain'), '-', parameters('apiAppSuffix'), '-', parameters('environment'))]",
-    "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]",
+    "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]"
   },
   "resources": [
     {
