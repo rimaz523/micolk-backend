@@ -75,6 +75,20 @@ stages:
                               artifact: drop
 
                             - task: AzureResourceManagerTemplateDeployment@3
+                              displayName: Create a storage account for deployment artifacts
+                              inputs:
+                                deploymentScope: 'Resource Group'
+                                azureResourceManagerConnection: '$(managedIdentityName)'
+                                subscriptionId: '$(subscriptionId)'
+                                action: 'Create Or Update Resource Group'
+                                resourceGroupName: '$(resourceGroupName)'
+                                location: '$(resourceGroupLocation)'
+                                templateLocation: 'Linked artifact'
+                                csmFile: '$(Pipeline.Workspace)/drop/infrastructure/storage/azuredeploy.json'
+                                deploymentMode: 'Incremental'
+                                deploymentOutputs: 'armOutputs'
+
+                            - task: AzureResourceManagerTemplateDeployment@3
                               inputs:
                                 deploymentScope: 'Resource Group'
                                 azureResourceManagerConnection: '$(managedIdentityName)'
