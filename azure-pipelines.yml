@@ -75,6 +75,48 @@ stages:
                               artifact: drop
                             
                             - task: AzureResourceManagerTemplateDeployment@3
+                              displayName: Create a storage account for deployment artifacts
+                              inputs:
+                                deploymentScope: 'Resource Group'
+                                azureResourceManagerConnection: '$(managedIdentityName)'
+                                subscriptionId: '$(subscriptionId)'
+                                action: 'Create Or Update Resource Group'
+                                resourceGroupName: '$(resourceGroupName)'
+                                location: '$(resourceGroupLocation)'
+                                templateLocation: 'Linked artifact'
+                                csmFile: '$(Pipeline.Workspace)/drop/infrastructure/storage/azuredeploy.json'
+                                deploymentMode: 'Incremental'
+                                deploymentOutputs: 'armOutputs'
+
+                            - task: AzurePowerShell@4
+                              displayName: Get the storage account and its container names
+                              inputs:
+                                azureSubscription: $(managedIdentityName)
+                                scriptType: 'InlineScript'
+                                Inline: |
+                                  $var=ConvertFrom-Json '$(armOutputs)'
+                                  $value=$var.storageAccountName.value
+                                  Write-Host "##vso[task.setvariable variable=storageAccountName;]$value"
+                                  $value=$var.storageContainerName.value
+                                  Write-Host "##vso[task.setvariable variable=storageContainerName;]$value"
+                                azurePowerShellVersion: 'latestVersion'
+                                pwsh: true
+
+                            - task: AzureFileCopy@3
+                              displayName: Copy deployment artifacts to the storage account
+                              inputs:
+                                sourcePath: '$(Pipeline.Workspace)/drop/infrastructure'
+                                azureSubscription: $(managedIdentityName)
+                                destination: azureBlob
+                                storage: $(storageAccountName)
+                                containerName: $(storageContainerName)
+                                blobPrefix: 'linked-templates'
+                                cleanTargetBeforeCopy: true
+                                outputStorageUri: artifactsLocation
+                                outputStorageContainerSasToken: artifactsLocationSasToken
+                                sasTokenTimeOutInMinutes: 30
+
+                            - task: AzureResourceManagerTemplateDeployment@3
                               inputs:
                                 deploymentScope: 'Resource Group'
                                 azureResourceManagerConnection: '$(managedIdentityName)'
@@ -85,9 +127,9 @@ stages:
                                 templateLocation: 'Linked artifact'
                                 csmFile: '$(Pipeline.Workspace)/drop/azuredeploy.json'
                                 csmParametersFile: '$(Pipeline.Workspace)/drop/azuredeploy.parameters.json'
-                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku) -dotnetVersion $(backendApiDotnetVersion)
+                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku) -dotnetVersion $(backendApiDotnetVersion) -artifactsLocation $(artifactsLocation) -artifactsLocationSasToken $(artifactsLocationSasToken)
                                 deploymentMode: 'Incremental'
-                                deploymentName: 'deploy2'
+                                deploymentOutputs: 'armOutputs'
 
                             - task: AzureWebApp@1
                               displayName: 'Azure App Service Deploy: .net core 5 api'

@@ -45,11 +45,26 @@
       "metadata": {
         "description": "dotnet core version for sdk"
       }
+    },
+    "artifactsLocation": {
+        "type": "string",
+        "metadata": {
+            "description": "The base URI where artifacts required by this template are located."
+        }
+    },
+    "artifactsLocationSasToken": {
+        "type": "securestring",
+        "metadata": {
+            "description": "The sasToken required to access artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+        }
     }
   },
   "variables": {
     "webAppName": "[concat(parameters('webAppDomain'), '-', parameters('apiAppSuffix'), '-', parameters('environment'))]",
-    "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]"
+    "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]",
+    "linkedTemplates": {
+        "apiManagement": "[concat(parameters('artifactsLocation'), 'infrastructure/api-management/azuredeploy.json', parameters('artifactsLocationSasToken'))]"
+    }
   },
   "resources": [
     {
@@ -62,27 +77,40 @@
       }
     },
     {
-            "apiVersion": "2020-06-01",
+        "apiVersion": "2020-06-01",
+        "name": "[variables('webAppName')]",
+        "type": "Microsoft.Web/sites",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]"
+        ],
+        "properties": {
             "name": "[variables('webAppName')]",
-            "type": "Microsoft.Web/sites",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]"
-            ],
-            "properties": {
-                "name": "[variables('webAppName')]",
-                "siteConfig": {
-                    "metadata": [
-                        {
-                            "name": "CURRENT_STACK",
-                            "value": "dotnet"
-                        }
-                    ],
-                    "netFrameworkVersion": "[parameters('dotnetVersion')]"
-                },
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
-                "clientAffinityEnabled": true
+            "siteConfig": {
+                "metadata": [
+                    {
+                        "name": "CURRENT_STACK",
+                        "value": "dotnet"
+                    }
+                ],
+                "netFrameworkVersion": "[parameters('dotnetVersion')]"
+            },
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
+            "clientAffinityEnabled": true
+        }
+    },
+    {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "name": "ApimDeployment",
+        "resourceGroup": "[resourceGroup().name]",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "[variables('linkedTemplates').apiManagement]",
+                "contentVersion": "1.0.0.0"
             }
         }
+    }
   ]
 }

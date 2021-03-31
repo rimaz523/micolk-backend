@@ -16,6 +16,12 @@
     },
     "dotnetVersion": {
       "value": "v5.0"
+    },
+    "artifactsLocation": {
+      "value": ""
+    },
+    "artifactsLocationSasToken": {
+      "value": ""
     }
   }
 }
