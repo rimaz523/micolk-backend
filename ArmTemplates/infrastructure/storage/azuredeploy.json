@@ -48,7 +48,7 @@
                 "description": "Container name to store deployment artifacts.",
                 "displayName": "Container name"
             },
-            "defaultValue": "artifacts"
+            "defaultValue": "arm-template-artifacts"
         }
     },
     "variables": {

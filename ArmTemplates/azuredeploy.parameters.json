@@ -17,11 +17,11 @@
     "dotnetVersion": {
       "value": "v5.0"
     },
-    "artifactsLocation": {
-      "value": ""
+    "templatesStorageAccountName": {
+      "value": "micolkstore"
     },
-    "artifactsLocationSasToken": {
-      "value": ""
+    "templatesContainerName": {
+      "value": "arm-template-artifacts"
     }
   }
 }

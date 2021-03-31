@@ -98,9 +98,6 @@ stages:
                                 storage: $(storageAccountName)
                                 containerName: $(storageContainerName)
                                 cleanTargetBeforeCopy: true
-                                outputStorageUri: artifactsLocation
-                                outputStorageContainerSasToken: artifactsLocationSasToken
-                                sasTokenTimeOutInMinutes: 30
 
                             - task: AzureResourceManagerTemplateDeployment@3
                               inputs:
@@ -113,7 +110,7 @@ stages:
                                 templateLocation: 'Linked artifact'
                                 csmFile: '$(Pipeline.Workspace)/drop/azuredeploy.json'
                                 csmParametersFile: '$(Pipeline.Workspace)/drop/azuredeploy.parameters.json'
-                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku) -dotnetVersion $(backendApiDotnetVersion) -artifactsLocation $(artifactsLocation) -artifactsLocationSasToken $(artifactsLocationSasToken)
+                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku) -dotnetVersion $(backendApiDotnetVersion) -templatesStorageAccountName $(storageAccountName) -templatesContainerName $(storageContainerName)
                                 deploymentMode: 'Incremental'
                                 deploymentOutputs: 'armOutputs'
 

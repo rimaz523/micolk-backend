@@ -46,16 +46,16 @@
         "description": "dotnet core version for sdk"
       }
     },
-    "artifactsLocation": {
+    "templatesStorageAccountName": {
         "type": "string",
         "metadata": {
-            "description": "The base URI where artifacts required by this template are located."
+            "description": "The storage account where artifacts required by this template are located."
         }
     },
-    "artifactsLocationSasToken": {
-        "type": "securestring",
+    "templatesContainerName": {
+        "type": "string",
         "metadata": {
-            "description": "The sasToken required to access artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+            "description": "The storage container where artifacts required by this template are located."
         }
     }
   },
@@ -63,7 +63,7 @@
     "webAppName": "[concat(parameters('webAppDomain'), '-', parameters('apiAppSuffix'), '-', parameters('environment'))]",
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]",
     "linkedTemplates": {
-        "apiManagement": "[concat(parameters('artifactsLocation'), 'infrastructure/api-management/azuredeploy.json', parameters('artifactsLocationSasToken'))]"
+        "apiManagement": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/azuredeploy.json')]"
     }
   },
   "resources": [
@@ -98,16 +98,19 @@
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
           "clientAffinityEnabled": true
       }
+    },
+    {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "name": "ApimDeployment",
+        "resourceGroup": "[resourceGroup().name]",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "[variables('linkedTemplates').apiManagement]",
+                "contentVersion": "1.0.0.0"
+            }
+        }
     }
-  ],
-  "outputs": {
-      "artifactsLocation": {
-          "type": "string",
-          "value": "[parameters('artifactsLocation')]"
-      },
-      "artifactsLocationSasToken": {
-          "type": "string",
-          "value": "[parameters('artifactsLocationSasToken')]"
-      }
-  }
+  ]
 }
