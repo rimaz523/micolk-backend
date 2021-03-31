@@ -97,8 +97,6 @@ stages:
                                 destination: AzureBlob
                                 storage: $(storageAccountName)
                                 containerName: $(storageContainerName)
-                                blobPrefix: 'artifacts'
-                                cleanTargetBeforeCopy: true
 
                             - task: AzureResourceManagerTemplateDeployment@3
                               inputs:
