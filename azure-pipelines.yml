@@ -88,6 +88,20 @@ stages:
                                 deploymentMode: 'Incremental'
                                 deploymentOutputs: 'armOutputs'
 
+                            - task: AzureFileCopy@4
+                              displayName: Copy deployment artifacts to the storage account
+                              inputs:
+                                sourcePath: '$(Pipeline.Workspace)/drop/infrastructure'
+                                azureSubscription: $(managedIdentityName)
+                                destination: azureBlob
+                                storage: $(storageAccountName)
+                                containerName: $(storageContainerName)
+                                blobPrefix: 'linked-templates'
+                                cleanTargetBeforeCopy: true
+                                outputStorageUri: artifactsLocation
+                                outputStorageContainerSasToken: artifactsLocationSasToken
+                                sasTokenTimeOutInMinutes: 30
+
                             - task: AzureResourceManagerTemplateDeployment@3
                               inputs:
                                 deploymentScope: 'Resource Group'
