@@ -2,13 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "storageAccountPrefix": {
+        "storageAccountName": {
             "type": "string",
             "metadata": {
                 "description": "Prefix to be used in storage account name.",
                 "displayName": "Account name prefix"
             },
-            "defaultValue": "deploy",
+            "defaultValue": "micolkstore",
             "maxLength": 11
         },
         "location": {
@@ -52,12 +52,11 @@
         }
     },
     "variables": {
-        "storageAccountName": "[concat(toLower(parameters('storageAccountPrefix')), uniqueString(resourceGroup().Id))]",
-        "blobEndPoint": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net/')]"
+        "blobEndPoint": "[concat('https://',parameters('storageAccountName'),'.blob.core.windows.net/')]"
     },
     "resources": [
         {
-            "name": "[variables('storageAccountName')]",
+            "name": "[parameters('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-04-01",
             "location": "[parameters('location')]",
@@ -75,7 +74,7 @@
                     "name": "[concat('default/', parameters('containerName'))]",
                     "apiVersion": "2019-04-01",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
                     ]
                 }
             ]
@@ -88,11 +87,11 @@
         },
         "storageAccountConnectionString": {
             "type": "string",
-            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-04-01').keys[0].value)]"
+            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-04-01').keys[0].value)]"
         },
         "storageAccountName": {
             "type": "string",
-            "value": "[variables('storageAccountName')]"
+            "value": "[parameters('storageAccountName')]"
         },
         "storageContainerName": {
             "type": "string",

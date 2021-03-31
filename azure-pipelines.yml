@@ -65,7 +65,7 @@ stages:
       condition: and (succeeded(), eq(variables['Build.SourceBranchName'], 'develop'))
       jobs:
           - deployment: Deploy
-            pool: 'MyAgentPool'
+            pool: '$(deployAgentPool)'
             environment: Development
             strategy:
                 runOnce:
@@ -85,6 +85,7 @@ stages:
                                 location: '$(resourceGroupLocation)'
                                 templateLocation: 'Linked artifact'
                                 csmFile: '$(Pipeline.Workspace)/drop/infrastructure/storage/azuredeploy.json'
+                                overrideParameters: -storageAccountName $(storageAccountName) -containerName $(storageContainerName)
                                 deploymentMode: 'Incremental'
                                 deploymentOutputs: 'armOutputs'
 
