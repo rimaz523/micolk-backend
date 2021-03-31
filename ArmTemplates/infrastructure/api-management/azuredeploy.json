@@ -33,8 +33,9 @@
       },
       "skuCount": {
         "type": "string",
-        "defaultValue": "1",
+        "defaultValue": "0",
         "allowedValues": [
+          "0",
           "1",
           "2"
         ],
