@@ -97,7 +97,6 @@ stages:
                                 destination: AzureBlob
                                 storage: $(storageAccountName)
                                 containerName: $(storageContainerName)
-                                blobPrefix: 'artifacts'
                                 cleanTargetBeforeCopy: true
                                 outputStorageUri: artifactsLocation
                                 outputStorageContainerSasToken: artifactsLocationSasToken
