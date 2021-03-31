@@ -97,6 +97,11 @@ stages:
                                 destination: AzureBlob
                                 storage: $(storageAccountName)
                                 containerName: $(storageContainerName)
+                                blobPrefix: 'artifacts'
+                                cleanTargetBeforeCopy: true
+                                outputStorageUri: artifactsLocation
+                                outputStorageContainerSasToken: artifactsLocationSasToken
+                                sasTokenTimeOutInMinutes: 30
 
                             - task: AzureResourceManagerTemplateDeployment@3
                               inputs:
