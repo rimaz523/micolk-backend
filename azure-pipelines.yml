@@ -97,7 +97,7 @@ stages:
                                 destination: azureBlob
                                 storage: $(storageAccountName)
                                 containerName: $(storageContainerName)
-                                blobPrefix: 'linked-templates'
+                                blobPrefix: 'artifacts'
                                 cleanTargetBeforeCopy: true
                                 outputStorageUri: artifactsLocation
                                 outputStorageContainerSasToken: artifactsLocationSasToken
