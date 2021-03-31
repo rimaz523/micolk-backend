@@ -73,6 +73,9 @@
                     "type": "blobServices/containers",
                     "name": "[concat('default/', parameters('containerName'))]",
                     "apiVersion": "2019-04-01",
+                    "properties": {
+                        "publicAccess": "Container"
+                    },
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
                     ]
