@@ -100,6 +100,7 @@ stages:
                                 cleanTargetBeforeCopy: true
 
                             - task: AzureResourceManagerTemplateDeployment@3
+                              displayName: Deploy backend infrastructure
                               inputs:
                                 deploymentScope: 'Resource Group'
                                 azureResourceManagerConnection: '$(managedIdentityName)'
@@ -115,7 +116,7 @@ stages:
                                 deploymentOutputs: 'armOutputs'
 
                             - task: AzureWebApp@1
-                              displayName: 'Azure App Service Deploy: .net core 5 api'
+                              displayName: 'Deploy .net core 5 api to azure app service'
                               inputs:
                                   azureSubscription: '$(managedIdentityName)'
                                   appName: '$(appName)-$(backendApiSuffix)-$(environment)'
