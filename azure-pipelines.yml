@@ -111,6 +111,7 @@ stages:
                                 templateLocation: 'Linked artifact'
                                 csmFile: '$(Pipeline.Workspace)/drop/azuredeploy.json'
                                 csmParametersFile: '$(Pipeline.Workspace)/drop/azuredeploy.parameters.json'
+                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku) -dotnetVersion $(backendApiDotnetVersion) -templatesStorageAccountName $(storageAccountName) -templatesContainerName $(storageContainerName)
                                 deploymentMode: 'Incremental'
                                 deploymentOutputs: 'armOutputs'
 
