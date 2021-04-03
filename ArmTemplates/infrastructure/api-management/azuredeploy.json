@@ -49,6 +49,12 @@
         "metadata": {
           "description": "Location for all resources."
         }
+      },
+      "swaggerFileLocation": {
+        "type": "string",
+        "metadata": {
+          "description": "Swagger api definition file location."
+        }
       }
     },
     "variables": {
@@ -68,6 +74,27 @@
           "publisherEmail": "[parameters('publisherEmail')]",
           "publisherName": "[parameters('publisherName')]"
         }
-      }
+      },
+      {
+          "type": "Microsoft.ApiManagement/service/apis",
+          "apiVersion": "2020-12-01",
+          "name": "[concat(variables('apiManagementServiceName'), '/micolk-api')]",
+          "dependsOn": [
+              "[resourceId('Microsoft.ApiManagement/service', variables('apiManagementServiceName'))]"
+          ],
+          "properties": {
+              "displayName": "MicoLK API",
+              "apiRevision": "1",
+              "subscriptionRequired": true,
+              "serviceUrl": "https://micolk-backend-api-dev.azurewebsites.net",
+              "path": "v1",
+              "protocols": [
+                  "https"
+              ],
+              "isCurrent": true,
+              "format": "swagger-json",
+              "value": "[parameters('swaggerFileLocation')]"
+          }
+        }
     ]
   }

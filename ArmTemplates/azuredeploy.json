@@ -64,7 +64,8 @@
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]",
     "linkedTemplates": {
         "apiManagement": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/azuredeploy.json')]"
-    }
+    },
+    "swaggerJson": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/swagger/v1/swagger.json')]"
   },
   "resources": [
     {
@@ -109,6 +110,9 @@
             "templateLink": {
                 "uri": "[variables('linkedTemplates').apiManagement]",
                 "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "swaggerFileLocation": "[variables('swaggerJson')]"
             }
         }
     }
