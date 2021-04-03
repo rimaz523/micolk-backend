@@ -112,7 +112,9 @@
                 "contentVersion": "1.0.0.0"
             },
             "parameters": {
-              "swaggerFileLocation": "[variables('swaggerJson')]"
+              "swaggerFileLocation": {
+                "value": "[variables('swaggerJson')]"
+              }
             }
         }
     }
