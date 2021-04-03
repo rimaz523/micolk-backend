@@ -96,9 +96,7 @@
     "linkedTemplates": {
         "apiManagement": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/azuredeploy.json')]"
     },
-    "swaggerJson": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/swagger/v1/swagger.json')]",
-    "apimVersionPath": "[parameters('apimVersionPath')]",
-    "apimDisplayName": "[parameters('apimDisplayName')]"
+    "swaggerJson": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/swagger/v1/swagger.json')]"
   },
   "resources": [
     {
@@ -155,10 +153,10 @@
                 "value": "[variables('webAppName')]"
               },
               "apimVersionPath": {
-                "value": "[variables('apimVersionPath')]"
+                "value": "[parameters('apimVersionPath')]"
               },
               "apimDisplayName": {
-                "value": "[variables('apimDisplayName')]"
+                "value": "[parameters('apimDisplayName')]"
               }
             }
         }
