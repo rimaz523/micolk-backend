@@ -29,7 +29,7 @@
     "templatesContainerName": {
       "value": "arm-template-artifacts"
     },
-    "apiVersion": {
+    "apimVersionPath": {
         "value": "v1"
     },
     "apimDisplayName": {

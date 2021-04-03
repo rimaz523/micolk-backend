@@ -34,7 +34,7 @@
         "description": "Web app type."
       }
     },
-    "apiVersion": {
+    "apimVersionPath": {
       "type": "string",
       "defaultValue": "v1",
       "metadata": {
@@ -96,7 +96,9 @@
     "linkedTemplates": {
         "apiManagement": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/azuredeploy.json')]"
     },
-    "swaggerJson": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/swagger/v1/swagger.json')]"
+    "swaggerJson": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/swagger/v1/swagger.json')]",
+    "apimVersionPath": "[parameters('apimVersionPath')]",
+    "apimDisplayName": "[parameters('apimDisplayName')]"
   },
   "resources": [
     {
@@ -153,10 +155,10 @@
                 "value": "[variables('webAppName')]"
               },
               "apimVersionPath": {
-                "value": "[parameters('apiVersion')]"
+                "value": "[variables('apimVersionPath')]"
               },
               "apimDisplayName": {
-                "value": "[parameters('apimDisplayName')]"
+                "value": "[variables('apimDisplayName')]"
               }
             }
         }
