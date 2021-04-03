@@ -11,7 +11,7 @@
         }
       },
       "publisherName": {
-        "defaultValue": "micolk-apim",
+        "defaultValue": "micolk",
         "type": "string",
         "minLength": 1,
         "metadata": {
@@ -55,16 +55,42 @@
         "metadata": {
           "description": "Swagger api definition file location."
         }
+      },
+      "apimName": {
+        "type": "string",
+        "metadata": {
+          "description": "APIM instance name."
+        }
+      },
+      "apimDisplayName": {
+        "type": "string",
+        "defaultValue": "MicoLK API",
+        "metadata": {
+          "description": "APIM instance name."
+        }
+      },
+      "apimVersionPath": {
+        "type": "string",
+        "defaultValue": "v1",
+        "metadata": {
+          "description": "APIM version"
+        }
+      },
+      "apiName": {
+        "type": "string",
+        "metadata": {
+          "description": "APIM instance name."
+        }
       }
     },
     "variables": {
-      "apiManagementServiceName": "[concat('apiservice', uniqueString(resourceGroup().id))]"
+      "serviceUrl": "[concat('https://', parameters('apiName'), '.azurewebsites.net')]"
     },
     "resources": [
       {
         "type": "Microsoft.ApiManagement/service",
         "apiVersion": "2019-12-01",
-        "name": "[variables('apiManagementServiceName')]",
+        "name": "[parameters('apimName')]",
         "location": "[parameters('location')]",
         "sku": {
           "name": "[parameters('sku')]",
@@ -78,20 +104,20 @@
       {
         "type": "Microsoft.ApiManagement/service/apis",
         "apiVersion": "2020-12-01",
-        "name": "[concat(variables('apiManagementServiceName'), '/micolk-api')]",
+        "name": "[concat(parameters('apimName'), '/micolk-api')]",
         "dependsOn": [
-            "[resourceId('Microsoft.ApiManagement/service', variables('apiManagementServiceName'))]"
+            "[resourceId('Microsoft.ApiManagement/service', parameters('apimName'))]"
         ],
         "properties": {
-            "displayName": "MicoLK API",
+            "displayName": "[parameters('apimDisplayName')]",
             "apiRevision": "1",
             "subscriptionRequired": true,
-            "serviceUrl": "https://micolk-backend-api-dev.azurewebsites.net",
+            "serviceUrl": "[variables('serviceUrl')]",
             "protocols": [
                 "https"
             ],
             "isCurrent": true,
-            "path": "v1",
+            "path": "[parameters('apimVersionPath')]",
             "format": "openapi+json-link",
             "value": "[parameters('swaggerFileLocation')]"
         }

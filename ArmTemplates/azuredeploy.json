@@ -10,12 +10,42 @@
         "description": "Web app name."
       }
     },
-    "apiAppSuffix": {
+    "backendSuffix": {
       "type": "string",
-      "defaultValue": "backend-api",
+      "defaultValue": "backend",
       "minLength": 5,
       "metadata": {
         "description": "Web app type."
+      }
+    },
+    "apiSuffix": {
+      "type": "string",
+      "defaultValue": "api",
+      "minLength": 3,
+      "metadata": {
+        "description": "Web app type."
+      }
+    },
+    "apimSuffix": {
+      "type": "string",
+      "defaultValue": "api",
+      "minLength": 3,
+      "metadata": {
+        "description": "Web app type."
+      }
+    },
+    "apiVersion": {
+      "type": "string",
+      "defaultValue": "v1",
+      "metadata": {
+        "description": "API version."
+      }
+    },
+    "apimDisplayName": {
+      "type": "string",
+      "defaultValue": "MicoLK API",
+      "metadata": {
+        "description": "Name of your api in APIM."
       }
     },
     "environment": {
@@ -60,7 +90,8 @@
     }
   },
   "variables": {
-    "webAppName": "[concat(parameters('webAppDomain'), '-', parameters('apiAppSuffix'), '-', parameters('environment'))]",
+  "webAppName": "[concat(parameters('webAppDomain'), '-', parameters('backendSuffix'), '-', parameters('apiSuffix'), '-', parameters('environment'))]",
+    "apimName": "[concat(parameters('webAppDomain'), '-', parameters('backendSuffix'), '-', parameters('apimSuffix'), '-', parameters('environment'))]",
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('webAppDomain'), '-', parameters('environment'))]",
     "linkedTemplates": {
         "apiManagement": "[concat('https://', parameters('templatesStorageAccountName'), '.blob.core.windows.net/', parameters('templatesContainerName'), '/infrastructure/api-management/azuredeploy.json')]"
@@ -114,6 +145,18 @@
             "parameters": {
               "swaggerFileLocation": {
                 "value": "[variables('swaggerJson')]"
+              },
+              "apimName": {
+                "value": "[variables('apimName')]"
+              },
+              "apiName": {
+                "value": "[variables('webAppName')]"
+              },
+              "apimVersionPath": {
+                "value": "[parameters('apiVersion')]"
+              },
+              "apimDisplayName": {
+                "value": "[parameters('apimDisplayName')]"
               }
             }
         }

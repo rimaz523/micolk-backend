@@ -5,8 +5,14 @@
     "webAppDomain": {
       "value": "micolk"
     },
-    "apiAppSuffix": {
-      "value": "backend-api"
+    "backendSuffix": {
+      "value": "backend"
+    },
+    "apiSuffix": {
+      "value": "api"
+    },
+    "apimSuffix": {
+      "value": "apim"
     },
     "environment": {
       "value": "dev"
@@ -22,6 +28,12 @@
     },
     "templatesContainerName": {
       "value": "arm-template-artifacts"
+    },
+    "apiVersion": {
+        "value": "v1"
+    },
+    "apimDisplayName": {
+        "value": "MicoLK API"
     }
   }
 }

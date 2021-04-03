@@ -111,7 +111,18 @@ stages:
                                 templateLocation: 'Linked artifact'
                                 csmFile: '$(Pipeline.Workspace)/drop/azuredeploy.json'
                                 csmParametersFile: '$(Pipeline.Workspace)/drop/azuredeploy.parameters.json'
-                                overrideParameters: -webAppDomain $(appName) -apiAppSuffix $(backendApiSuffix) -environment $(environment) -sku $(appSku) -dotnetVersion $(backendApiDotnetVersion) -templatesStorageAccountName $(storageAccountName) -templatesContainerName $(storageContainerName)
+                                overrideParameters: |
+                                  -webAppDomain $(appName) 
+                                  -backendSuffix $(backendSuffix) 
+                                  -apiSuffix $(apiSuffix) 
+                                  -environment $(environment) 
+                                  -sku $(appSku)
+                                  -apimSuffix $(apimSuffix) 
+                                  -apiVersion $(apiVersion)
+                                  -apimDisplayName $(apimDisplayName)
+                                  -dotnetVersion $(backendApiDotnetVersion) 
+                                  -templatesStorageAccountName $(storageAccountName) 
+                                  -templatesContainerName $(storageContainerName)
                                 deploymentMode: 'Incremental'
                                 deploymentOutputs: 'armOutputs'
 
@@ -119,6 +130,6 @@ stages:
                               displayName: 'Deploy .net core 5 api to azure app service'
                               inputs:
                                   azureSubscription: '$(managedIdentityName)'
-                                  appName: '$(appName)-$(backendApiSuffix)-$(environment)'
+                                  appName: '$(appName)-$(backendSuffix)-$(apiSuffix)-$(environment)'
                                   appType: 'webApp'
                                   package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
