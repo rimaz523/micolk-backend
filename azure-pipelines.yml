@@ -65,7 +65,8 @@ stages:
       condition: and (succeeded(), eq(variables['Build.SourceBranchName'], 'develop'))
       jobs:
           - deployment: Deploy
-            pool: '$(deployAgentPool)'
+            pool:
+                vmImage: '$(buildVmImage)'
             environment: Development
             strategy:
                 runOnce:
