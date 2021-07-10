@@ -66,7 +66,7 @@ stages:
       jobs:
           - deployment: Deploy
             pool:
-                vmImage: '$(buildVmImage)'
+                vmImage: '$(deployVmImage)'
             environment: Development
             strategy:
                 runOnce:
