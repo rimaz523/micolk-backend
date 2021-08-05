@@ -1,5 +1,6 @@
 using Application;
 using FluentValidation.AspNetCore;
+using Infrastructure;
 using micolk_api.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +31,7 @@ namespace micolk_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplication();
+            services.AddInfrastructure(Configuration);
             services.AddControllers();
             services.AddControllersWithViews(options =>
                 options.Filters.Add<ApiExceptionFilterAttribute>())

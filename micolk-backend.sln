@@ -11,13 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{071204E8-128B-42F4-A442-1974740838AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationUnitTests", "ApplicationUnitTests\ApplicationUnitTests.csproj", "{F4C5775B-0D61-4878-92D8-BA030427C059}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationUnitTests", "ApplicationUnitTests\ApplicationUnitTests.csproj", "{F4C5775B-0D61-4878-92D8-BA030427C059}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostmanIntegrationTests", "PostmanIntegrationTests", "{F84FD9B6-D31E-4DD8-A836-CC18B1456757}"
 	ProjectSection(SolutionItems) = preProject
 		PostmanIntegrationTests\MicoLK-API-Env-Dev.postman_environment.json = PostmanIntegrationTests\MicoLK-API-Env-Dev.postman_environment.json
 		PostmanIntegrationTests\MicoLK-API.postman_collection.json = PostmanIntegrationTests\MicoLK-API.postman_collection.json
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{4824C632-9005-44CB-893C-DAAC0CC8CB83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{F4C5775B-0D61-4878-92D8-BA030427C059}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4C5775B-0D61-4878-92D8-BA030427C059}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4C5775B-0D61-4878-92D8-BA030427C059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4824C632-9005-44CB-893C-DAAC0CC8CB83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4824C632-9005-44CB-893C-DAAC0CC8CB83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4824C632-9005-44CB-893C-DAAC0CC8CB83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4824C632-9005-44CB-893C-DAAC0CC8CB83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

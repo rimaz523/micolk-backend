@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Domain.Entities;
+﻿using Application.Common.Interfaces;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Threading;
@@ -15,24 +15,21 @@ namespace Application.Users.Queries.GetUserById
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IMapper _mapper;
+        private readonly IApplicationSqlDbContext _context;
 
         public GetUserByIdQueryHandler
         (
-            IMapper mapper
+            IMapper mapper,
+            IApplicationSqlDbContext context
         )
         {
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var user = new User
-            {
-                Id = request.Id,
-                FirstName = "John",
-                LastName = "Doe"
-            };
-            //return new UserDto();
+            var user = await _context.Users.FindAsync(request.Id);
             return _mapper.Map<UserDto>(user);
         }
     }
